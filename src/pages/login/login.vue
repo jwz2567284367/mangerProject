@@ -2,26 +2,44 @@
 <div class='login'>
 <div class="con">
     <h2>登录</h2>
-    <div class="input"><input type="text" placeholder="请输入用户名"></div>
-    <div class="input"><input type="text" placeholder="请输入密码"></div>
-    <button class="btn">登录</button>
+    <div class="input"><input type="text" placeholder="请输入用户名" v-model="user.username"></div>
+    <div class="input"><input type="text" placeholder="请输入密码" v-model="user.password"></div>
+    <button class="btn" @click="login">登录</button>
 </div>
 </div>
 </template>
 
 <script>
-
+import {requserlogin} from "../../util/request"
+import {mapActions,mapGetters} from 'vuex'
 export default {
 components: {
 
 },
 data() {
 return {
-
+user:{
+    user:{
+        username:"",
+        password:"",
+    }
+}
 };
 },
 methods: {
-
+    ...mapActions({
+requestuserlist:'user/requestuserlist'
+    }),
+login(){
+requserlogin(this.user).then(res=>{
+    if(res.data.code==200){
+        this.requestuserlist(res.data.list)
+    this.$router.push('/index/home')
+    }else{
+        alert(res.data.msg)
+    }
+})
+},
 },
 mounted() {
 

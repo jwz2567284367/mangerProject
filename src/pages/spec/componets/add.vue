@@ -61,7 +61,7 @@ export default {
   components: {},
   computed: {
     ...mapGetters({
-      // specslist: "specs/list",
+        specslist: "specs/list",
     }),
   },
   data() {
@@ -86,7 +86,6 @@ export default {
     };
   },
   methods: {
-  
     empty() {
       this.form = {
         specsname: "",
@@ -104,7 +103,8 @@ export default {
         })
       );
       reqspecsadd(this.form).then((res) => {
-         this.requestcatelist();
+        this.requestcatelist();
+        this.requestspecslist();
         this.hide();
         this.empty();
       });
@@ -121,6 +121,7 @@ export default {
     },
     ...mapActions({
       requestcatelist: "cate/requestcatelist",
+      requestspecslist: "specs/requestspecslist",
     }),
     // 获取一条数据
     look(id) {
@@ -128,23 +129,27 @@ export default {
         this.form = res.data.list[0];
         this.form.id = id;
         console.log(this.form);
-        this.arrattr=JSON.parse(this.form.attrs).map(item=>{return {value:item}})
+        this.arrattr = JSON.parse(this.form.attrs).map((item) => {
+          return { value: item };
+        });
       });
     },
     update() {
-       this.form.attrs = JSON.stringify(
+      this.form.attrs = JSON.stringify(
         this.arrattr.map((item) => {
           return item.value;
         })
       );
       reqspecsedit(this.form).then((res) => {
         this.requestcatelist();
+        this.requestspecslist();
         this.hide();
       });
     },
   },
   mounted() {
     this.requestcatelist();
+    
   },
 
   watch: {},

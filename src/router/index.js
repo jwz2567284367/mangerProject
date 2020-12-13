@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from '../store/index'
 const login = () => import('../pages/login/login')
 const index = () => import('../pages/index/index')
 const home = () => import('../pages/home/home')
@@ -22,7 +22,15 @@ export const indexRouters = [{
   {
     path: 'role',
     component: role,
-    name: "角色管理"
+    name: "角色管理",
+    // 路由独享守卫
+    // beforeEnter: (to, from, next) => {
+    //   if (from.path == '/index/home') {
+    //     next()
+    //   } else {
+    //     next('/home')
+    //   }
+    // }
   }, {
     path: 'manger',
     component: manger,
@@ -59,7 +67,7 @@ export const indexRouters = [{
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [{
       path: '/login',
       component: login
@@ -69,7 +77,15 @@ export default new Router({
       component: index,
       children: [{
           path: 'home',
-          component: home
+          component: home,
+          // 路由独享守卫
+          // beforeEnter: (to, from, next) => {
+          //   if (from.path == '/login' && store.state.user.list) {
+          //     next()
+          //   } else {
+          //     next('/login')
+          //   }
+          // }
         }, {
           path: '',
           redirect: 'home'
@@ -77,13 +93,27 @@ export default new Router({
         ...indexRouters
       ]
     },
-    {
-       path: '/',
-         component: index
-    },
+    // {
+    //   path: '/',
+    //   component: login
+    // },
     {
       path: '*',
-      redirect: 'index'
+      redirect: 'login'
     },
   ]
 })
+// 全局守卫
+
+router.beforeEach((to, from, next) => {
+  // 去登录页面
+  if (to.path == '/login') next()
+  // 判断用户是否登录
+  if (store.state.user.list.menus) {
+    next()
+  } else {
+    // this.$router.push('/login')
+    // next('/login')
+  }
+})
+export default router

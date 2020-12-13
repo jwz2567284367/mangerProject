@@ -3,10 +3,7 @@
     <el-dialog :title="info.title" :visible.sync="info.isshow">
       <el-form :model="form">
         <el-form-item label="所属角色" :label-width="width">
-         <el-select
-            v-model="form.roleid"
-            placeholder="--请选择--"
-          >
+          <el-select v-model="form.roleid" placeholder="--请选择--">
             <el-option label="请选择" :value="0" disabled></el-option>
             <el-option
               v-for="item in rolelist"
@@ -19,7 +16,7 @@
         <el-form-item label="用户名" :label-width="width">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-   <el-form-item label="密码" :label-width="width">
+        <el-form-item label="密码" :label-width="width">
           <el-input v-model="form.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="状态" :label-width="width">
@@ -60,9 +57,9 @@ export default {
     return {
       width: "150px",
       form: {
-        roleid:"",
+        roleid: "",
         username: "",
-        password:"",
+        password: "",
         status: 1,
       },
       indexRouters: indexRouters,
@@ -74,45 +71,43 @@ export default {
   },
   methods: {
     // 重置
-     empty() {
-      this.form =  {
-        roleid:"",
+    empty() {
+      this.form = {
+        roleid: "",
         username: "",
-        password:"",
+        password: "",
         status: 1,
-      }
-     },
+      };
+    },
 
-     // 隐藏弹框
+    // 隐藏弹框
     hide() {
       this.info.isshow = false;
     },
     //添加
     add() {
       requseradd(this.form).then((res) => {
-       
-        this.empty()
+        this.empty();
         this.hide();
-         this.requestuserlist();
-        this.requestusercount()
+        this.requestuserlist();
+        this.requestusercount();
       });
     },
 
     ...mapActions({
       requestuserlist: "manger/requestuserlist",
-       requestusercount: "manger/requestusercount",
+      requestusercount: "manger/requestusercount",
       requestrolelist: "role/requestrolelist",
     }),
     // 获取一条数据
     look(id) {
       requserlistone({ uid: id }).then((res) => {
         this.form = res.data.list;
-       this.form.password='';
+        this.form.password = "";
         this.form.uid = id;
       });
     },
     update() {
-
       requseredit(this.form).then((res) => {
         this.requestuserlist();
         this.hide();

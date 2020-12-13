@@ -28,7 +28,7 @@
         </template>
       </el-table-column>
     </el-table>
-<div>   {{list}}</div>
+
   </div> 
 </template> 
 

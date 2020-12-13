@@ -14,18 +14,21 @@
             <i class="el-icon-menu"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-submenu index="1">
+          <div v-for="item in list.menus" :key="item.id">
+          <el-submenu index="item.url" v-if="item.children">
             <template slot="title">
               <i class="el-icon-s-tools"></i>
-              <span>系统设置</span>
+              <span>{{item.title}} </span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/index/menu">菜单管理</el-menu-item>
-              <el-menu-item index="/index/role">角色管理</el-menu-item>
-              <el-menu-item index="/index/manger">管理员管理</el-menu-item>
+              <el-menu-item :index="'/index'+i.url" v-for="i in item.children" :key="i.id">{{i.title}} </el-menu-item>
+              <!-- <el-menu-item index="/index/role">角色管理</el-menu-item>
+              <el-menu-item index="/index/manger">管理员管理</el-menu-item> -->
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="3">
+           <el-menu-item :index="item.url" v-else>{{item.title}} </el-menu-item>
+           </div>
+          <!-- <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-s-goods"></i>
               <span>商城管理</span>
@@ -38,18 +41,21 @@
               <el-menu-item index="/index/banner">轮播图管理</el-menu-item>
               <el-menu-item index="/index/seckill">秒杀活动</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
+          
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <div class="user1"><el-button type="danger" @click="quit">退出</el-button></div>
+          <div class="user2">{{list.username}}</div>
+           </el-header>
         <el-main>
           <!-- 面包屑导航 -->
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{ $route.name }} </el-breadcrumb-item>
-            <!-- <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-  <el-breadcrumb-item>活动详情</el-breadcrumb-item> -->
+           
           </el-breadcrumb>
           <div class="rw"><router-view></router-view></div>
         </el-main>
@@ -59,14 +65,30 @@
 </template>
 
 <script>
+import {mapGetters,mapActions} from 'vuex'
 export default {
   components: {},
   data() {
     return {};
   },
-  methods: {},
-  mounted() {},
-  computed: {},
+  methods: {
+    ...mapActions({
+      requestuserlist:'user/requestuserlist'
+    }),
+    quit(){
+      this.requestuserlist({})
+      this.$router.push('/login');
+    }
+  },
+  mounted() {
+    // this.requestuserlist()
+     console.log(this.list)
+  },
+  computed: {
+    ...mapGetters({
+      list:'user/list'
+    })
+  },
   watch: {},
 };
 </script>
@@ -76,6 +98,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+ 
 }
 
 .el-aside {
@@ -105,5 +128,14 @@ export default {
 }
 .rw {
   margin-top: 20px;
+}
+.user2 {
+
+  float: right;
+  
+}
+.user1 {
+  float: right;
+  margin-left: 30px;
 }
 </style>

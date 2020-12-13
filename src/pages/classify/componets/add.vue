@@ -22,7 +22,6 @@
             action="#"
             :show-file-list="false"
             :on-change="changeimg"
-      
           >
             <img v-if="imageurl" :src="imageurl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -66,11 +65,11 @@ export default {
   data() {
     return {
       width: "150px",
-      imageurl:"",
+      imageurl: "",
       form: {
         catename: "",
-        pid: '',
-        img:null,
+        pid: "",
+        img: null,
         status: 1,
       },
       indexRouters: indexRouters,
@@ -84,27 +83,25 @@ export default {
   methods: {
     //--上传图片--
     changeimg(e) {
-        console.log(e);
-        var file=e.raw
+      console.log(e);
+      var file = e.raw;
       this.imageurl = URL.createObjectURL(file);
-      this.form.img=file
+      this.form.img = file;
     },
     empty() {
       this.form = {
         catename: "",
-        pid: '',
-        img:null,
+        pid: "",
+        img: null,
         status: 1,
       };
-    
     },
     hide() {
       this.info.isshow = false;
     },
     add() {
-     
       reqcateadd(this.form).then((res) => {
-          this.requestcatelist();
+        this.requestcatelist();
         this.hide();
         this.empty();
       });
@@ -115,21 +112,21 @@ export default {
     }),
     // 获取一条数据
     look(id) {
-        reqcatelistone({ id: id }).then((res) => {
-          this.form = res.data.list;        
-          this.form.id = id;
-          this.imageurl=this.$preimg+res.data.list.img
-        });
+      reqcatelistone({ id: id }).then((res) => {
+        this.form = res.data.list;
+        this.form.id = id;
+        this.imageurl = this.$preimg + res.data.list.img;
+      });
     },
     update() {
-        reqcateedit(this.form).then((res) => {
-          this.requestcatelist();
-          this.hide();
-        });
+      reqcateedit(this.form).then((res) => {
+        this.requestcatelist();
+        this.hide();
+      });
     },
   },
   mounted() {
-   this.requestcatelist()
+    this.requestcatelist();
   },
 
   watch: {},

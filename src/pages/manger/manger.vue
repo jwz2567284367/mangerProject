@@ -26,13 +26,11 @@ export default {
     };
   },
   methods: {
-   
-    
     willadd() {
       this.info.isshow = !this.info.isshow;
       this.info.title = "管理员添加";
       this.info.isadd = true;
-       this.$refs.one.empty()
+      this.$refs.one.empty();
     },
     edit(id) {
       this.info.isshow = true;

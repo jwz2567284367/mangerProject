@@ -95,6 +95,8 @@ export default {
 </script>
 <style>
 .el-pagination {
+  width: 85vw;
+
   text-align: center;
   height: 45px;
 }
